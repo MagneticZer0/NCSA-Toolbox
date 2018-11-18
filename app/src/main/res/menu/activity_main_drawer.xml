@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+        <item
+            android:id="@+id/Toolbox"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="@string/navigation_drawer_toolbox" />
+
+    <item android:title="@string/navigation_drawer_knowledge">
+        <menu>
+            <item
+                android:id="@+id/nav_slideshow"
+                android:icon="@drawable/ic_menu_slideshow"
+                android:title="@string/navigation_drawer_presentations" />
+            <item
+                android:id="@+id/nav_pdf"
+                android:icon="@drawable/ic_menu_pdf"
+                android:title="@string/navigation_drawer_pdfs" />
+            <item
+                android:id="@+id/nav_video"
+                android:icon="@drawable/ic_menu_video"
+                android:title="@string/navigation_drawer_videos" />
+        </menu>
+    </item>
+    <item android:title="@string/navigation_drawer_more">
+        <menu>
+            <item
+                android:id="@+id/nav_website"
+                android:icon="@drawable/ic_menu_website"
+                android:title="@string/navigation_drawer_website" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_menu_about"
+                android:title="@string/navigation_drawer_about" />
+            <item
+                android:id="@+id/nav_social"
+                android:icon="@drawable/ic_menu_social"
+                android:title="@string/navigation_drawer_social" />
+        </menu>
+    </item>
+</menu>

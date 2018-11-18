@@ -1,0 +1,53 @@
+<resources>
+    <!--General things start-->
+    <string name="app_name">NCSA Toolbox</string>
+    <string name="ncsa_website">https://www.ncsa.tech</string>
+    <!--General things end-->
+
+    <!--Navigation menu start-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_menu">Navigation Menu</string>
+    <string name="navigation_drawer_toolbox">Toolbox</string>
+    <string name="navigation_drawer_knowledge">Knowledge Base</string>
+    <string name="navigation_drawer_presentations">Presentations</string>
+    <string name="navigation_drawer_pdfs">PDFs</string>
+    <string name="navigation_drawer_videos">Videos</string>
+    <string name="navigation_drawer_more">More</string>
+    <string name="navigation_drawer_website">Website</string>
+    <string name="navigation_drawer_about">About NCSA</string>
+    <string name="navigation_drawer_social">Social Media</string>
+    <!--Navigation menu end-->
+
+    <!--Settings menu start-->
+    <string name="action_settings">Settings</string>
+    <!--Settings menu end-->
+
+    <!--Subnetter screen start-->
+    <string name="subnet_subnetter">Subnetter</string>
+    <string name="subnet_subnetDescription">The Subnetter is a tool that allows you to perform subnetting operations on an arbitrary network. The beginner mode splits the network in equally sized sub-networks. Advanced mode lets you set the number of hosts per sub-network.</string>
+    <string name="subnet_enterSubnet">Enter Subnetter</string>
+    <string name="subnet_ipText">IP Address:</string>
+    <string name="subnet_ipHint">IP Address...</string>
+    <string name="subnet_cidrText">CIDR:</string>
+    <string name="subnet_cidrHint">CIDR Notation...</string>
+    <string name="subnet_subnetsText">Amount of Subnets:</string>
+    <string name="subnet_numSubnetsHint">Number of Subnets...</string>
+    <string name="subnet_advanced">Advanced Mode</string>
+    <string name="subnet_network">Network:</string>
+    <string name="subnet_networkHint">Network...</string>
+    <string name="subnet_hosts">Hosts:</string>
+    <string name="subnet_hostsHint">Number of Hosts...</string>
+    <string name="subnet_generate">Generate</string>
+    <!--Subnetter screen end-->
+
+    <!--Knowledge Base screen start-->
+    <string name="knowledge_title">Knowledge Base</string>
+    <!--Knowledge Base screen end-->
+
+    <!--About screen start-->
+    <string name="about_title">About Us</string>
+    <string name="about_desc">This is a test</string>
+    <!--About screen end-->
+
+</resources>
