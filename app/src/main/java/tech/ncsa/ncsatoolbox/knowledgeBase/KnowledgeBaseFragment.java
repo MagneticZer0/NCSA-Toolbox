@@ -22,16 +22,15 @@ import android.widget.VideoView;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import tech.ncsa.ncsatoolbox.MainActivity;
 import tech.ncsa.ncsatoolbox.R;
 
 public class KnowledgeBaseFragment extends Fragment {
 
     View view;
-    List<List<String>> items = new ArrayList<>();
+    List<List<String>> items = MainActivity.getKnowledgebaseItems();
 
     @Nullable
     @Override
@@ -45,25 +44,6 @@ public class KnowledgeBaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         getActivity().setTitle(getString(R.string.knowledge_title));
-        String test = "DNS and DHCP Configuration /!\\ https://ncsa.tech/Presentations/DNS%20and%20DHCP%20Configuration.png /!\\ https://ncsa.tech/Presentations/DNS%20and%20DHCP%20Configuration.pptx\n" +
-                "DNS and DHCP Configuration /!\\ https://ncsa.tech/Presentations/DNS%20and%20DHCP%20Configuration.png /!\\ https://ncsa.tech/Presentations/DNS%20and%20DHCP%20Configuration.mp4\n" +
-                "Windows Active Directory Enviroment /!\\ https://ncsa.tech/Presentations/Active%20Directory.png /!\\ https://ncsa.tech/Presentations/Active%20Directory.pptx\n" +
-                "Windows Active Directory Enviroment /!\\ https://ncsa.tech/Presentations/Active%20Directory.png /!\\ https://ncsa.tech/Presentations/Active%20Directory%20Domain%20Services.mp4\n" +
-                "Visualization /!\\ https://ncsa.tech/Presentations/Virtualization%20-F18.png /!\\ https://ncsa.tech/Presentations/Virtualization%20-F18.pptx\n" +
-                "Basics of Networking /!\\ https://ncsa.tech/Presentations/Basics%20of%20Networking%20-F18.png /!\\ https://ncsa.tech/Presentations/Basics%20of%20Networking%20-F18.pptx\n" +
-                "Introduction /!\\ https://ncsa.tech/Presentations/Intro%20to%20NCSA%20-F18.png /!\\ https://ncsa.tech/Presentations/Intro%20to%20NCSA%20-F18.pptx\n" +
-                "Routing Protocols /!\\ https://ncsa.tech/Presentations/Routing%20Protocols.png /!\\ https://ncsa.tech/Presentations/Routing%20Protocols.pptx\n" +
-                "OSI 7 Layer Model /!\\ https://ncsa.tech/Presentations/The%20OSI%207%20Layer%20Model.png /!\\ https://ncsa.tech/Presentations/The%20OSI%207%20Layer%20Model.pptx\n" +
-                "Virtual Machines /!\\ https://ncsa.tech/Presentations/Creating%20Your%20Own%20Virtual%20Machines.png /!\\ https://ncsa.tech/Presentations/Creating%20Your%20Own%20Virtual%20Machines.pptx\n" +
-                "Introduction to Kali Linux /!\\ https://ncsa.tech/Presentations/Intro%20to%20Kali%20Linux%20_%20Tools.png /!\\ https://ncsa.tech/Presentations/Intro%20to%20Kali%20Linux%20_%20Tools.pptx\n" +
-                "Static/Default Routing /!\\ https://ncsa.tech/Presentations/Static%20and%20Default%20Routing.png /!\\ https://ncsa.tech/Presentations/Static%20and%20Default%20Routing.pdf\n" +
-                "Basics of Networking /!\\ https://ncsa.tech/Presentations/Basics%20of%20Networking.png /!\\ https://ncsa.tech/Presentations/Basics%20of%20Networking.pptx\n" +
-                "Networking Topologies /!\\ https://ncsa.tech/Presentations/Network%20Topologies.png /!\\ https://ncsa.tech/Presentations/Network%20Topologies.pptx\n" +
-                "Cabling /!\\ https://ncsa.tech/Presentations/Cabling.png /!\\ https://ncsa.tech/Presentations/Cabling.pptx";
-        String[] lines = test.split("\n");
-        for (String line : lines) {
-            items.add(Arrays.asList(line.split(" /!\\\\ ")));
-        }
         if (getArguments().get("type").equals("Presentations")) {
             loadPresentations();
         } else if (getArguments().get("type").equals("PDFs")) {
