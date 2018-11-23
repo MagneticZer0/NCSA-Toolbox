@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ public class ToolboxFragment extends Fragment {
     @Nullable
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        configureButtons(getView().findViewById(R.id.subnetter), getView().findViewById(R.id.subnetArea), getView().findViewById(R.id.enterSubnetter), "subnetter");
+        configureButtons(findViewById(R.id.subnetter), findViewById(R.id.subnetArea), findViewById(R.id.enterSubnetter), "subnetter");
         getActivity().setTitle(getString(R.string.app_name));
     }
 
@@ -44,16 +45,13 @@ public class ToolboxFragment extends Fragment {
     private void configureButtons(View openButton, final View infoArea, View enterButton, String activitySwitch) {
         final Button opener = (Button) openButton;
         opener.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_button_up_arrow, 0);
-        opener.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (infoArea.getVisibility() == View.GONE) {
-                    opener.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_button_down_arrow, 0);
-                    openAnimation(infoArea);
-                } else {
-                    opener.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_button_up_arrow, 0);
-                    closeAnimation(infoArea);
-                }
+        opener.setOnClickListener(view -> {
+            if (infoArea.getVisibility() == View.GONE) {
+                opener.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_button_down_arrow, 0);
+                openAnimation(infoArea);
+            } else {
+                opener.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_button_up_arrow, 0);
+                closeAnimation(infoArea);
             }
         });
         Button enterer = (Button) enterButton;
@@ -67,12 +65,7 @@ public class ToolboxFragment extends Fragment {
      */
     private void assignEntererMethod(final Button button, String activitySwitch) {
         if (activitySwitch.equals("subnetter")) {
-            button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    switchToSubnetter();
-                }
-            });
+            button.setOnClickListener(this::switchToSubnetter);
         }
     }
 
@@ -114,10 +107,22 @@ public class ToolboxFragment extends Fragment {
     }
 
     /**
-     * Used to switch to the subnetting activity
+     * Used to switch to the activities
      */
-    public void switchToSubnetter() {
-        FragmentManager fragMan = getFragmentManager();
-        fragMan.beginTransaction().replace(R.id.content_frame, new SubnetterFragment()).commit();
+    public void switchToSubnetter(View view) {
+        String viewName = getResources().getResourceName(view.getId()).split("/")[1];
+        if (viewName.equals("enterSubnetter")) {
+            FragmentManager fragMan = getFragmentManager();
+            fragMan.beginTransaction().replace(R.id.content_frame, new SubnetterFragment()).commit();
+        }
+    }
+
+    /**
+     * Used to return a view from th activity
+     * @param ID The ID of the view to find
+     * @return THe view with that ID
+     */
+    private View findViewById(int ID) {
+        return getView().findViewById(ID);
     }
 }

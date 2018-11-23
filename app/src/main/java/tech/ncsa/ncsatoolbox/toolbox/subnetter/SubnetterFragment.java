@@ -104,189 +104,168 @@ public class SubnetterFragment extends Fragment {
      */
     private void addActionListeners() {
         // This is the action listener for the ipAddress EditText
-        findViewById(R.id.ipAddress).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    reformatIPAddress();
-                }
+        findViewById(R.id.ipAddress).setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus) {
+                reformatIPAddress();
             }
         });
 
         // This is the action listener for the cidrNotation EditText
-        findViewById(R.id.cidrNotation).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    reformatCIDR();
-                }
+        findViewById(R.id.cidrNotation).setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus) {
+                reformatCIDR();
             }
         });
 
         // This is the action listener for the numberOfSubnets EditText
-        findViewById(R.id.numberOfSubnets).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    reformatSubnets();
-                }
+        findViewById(R.id.numberOfSubnets).setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus) {
+                reformatSubnets();
             }
         });
 
         // This is the action listener for the advanced Switch
-        ((Switch) findViewById(R.id.advanced)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked) {
-                    findViewById(R.id.networkText).setVisibility(View.VISIBLE);
-                    findViewById(R.id.network).setVisibility(View.VISIBLE);
-                    findViewById(R.id.hostsText).setVisibility(View.VISIBLE);
-                    findViewById(R.id.hosts).setVisibility(View.VISIBLE);
-                } else {
-                    findViewById(R.id.networkText).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.network).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.hostsText).setVisibility(View.INVISIBLE);
-                    findViewById(R.id.hosts).setVisibility(View.INVISIBLE);
-                }
+        ((Switch) findViewById(R.id.advanced)).setOnCheckedChangeListener(((compoundButton, isChecked) -> {
+            if (isChecked) {
+                findViewById(R.id.networkText).setVisibility(View.VISIBLE);
+                findViewById(R.id.network).setVisibility(View.VISIBLE);
+                findViewById(R.id.hostsText).setVisibility(View.VISIBLE);
+                findViewById(R.id.hosts).setVisibility(View.VISIBLE);
+            } else {
+                findViewById(R.id.networkText).setVisibility(View.INVISIBLE);
+                findViewById(R.id.network).setVisibility(View.INVISIBLE);
+                findViewById(R.id.hostsText).setVisibility(View.INVISIBLE);
+                findViewById(R.id.hosts).setVisibility(View.INVISIBLE);
             }
-        });
+        }));
 
         // This is the action listener for the network EditText
-        findViewById(R.id.network).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    reformatNetwork();
-                    setText(findViewById(R.id.hosts), String.valueOf(variableSubnets.get(Integer.parseInt(getText(findViewById(R.id.network))))));
-                }
+        findViewById(R.id.network).setOnFocusChangeListener((view1, hasFocus) -> {
+            if (!hasFocus) {
+                reformatNetwork();
+                setText(findViewById(R.id.hosts), String.valueOf(variableSubnets.get(Integer.parseInt(getText(findViewById(R.id.network))))));
             }
         });
 
         // This is the action listener for the hosts EditText
-        findViewById(R.id.hosts).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (!hasFocus) {
-                    variableSubnets.set(Integer.parseInt(getText(findViewById(R.id.network))), Integer.parseInt(getText(findViewById(R.id.hosts))));
-                }
+        findViewById(R.id.hosts).setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus) {
+                variableSubnets.set(Integer.parseInt(getText(findViewById(R.id.network))), Integer.parseInt(getText(findViewById(R.id.hosts))));
             }
         });
 
         // This is the action listener for the generate Button
-        findViewById(R.id.generate).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reformatAll();
-                clearFocus();
-                setOutput(findViewById(R.id.output), "");
-                appendToOutput("Okay, first let's get the subnet mask! \n");
-                appendToOutput("So we can look at the CIDR suffix for that \n");
-                appendToOutput("The " + getText(findViewById(R.id.cidrNotation)) + " means that we have " + getCIDR() + " bits to identify our network! \n");
+        findViewById(R.id.generate).setOnClickListener(view -> {
+            reformatAll();
+            clearFocus();
+            setOutput(findViewById(R.id.output), "");
+            appendToOutput("Okay, first let's get the subnet mask! \n");
+            appendToOutput("So we can look at the CIDR suffix for that \n");
+            appendToOutput("The " + getText(findViewById(R.id.cidrNotation)) + " means that we have " + getCIDR() + " bits to identify our network! \n");
 
-                StringBuilder subnetMask = new StringBuilder();
+            StringBuilder subnetMask = new StringBuilder();
+            for (int i = 0; i < 32; i++) {
+                if (i % 8 == 0 && i != 0) {
+                    subnetMask.append(".");
+                }
+                if (i < getCIDR()) {
+                    subnetMask.append(1);
+                } else {
+                    subnetMask.append(0);
+                }
+
+            }
+            appendToOutput("Meaning that our subnet mask is: " + subnetMask.toString() + "\n");
+
+            appendToOutput("--------------------------------\n");
+
+            if (!isAdvancedMode()) {
+                int powerOfTwo = (int) Math.ceil(Math.log(Integer.parseInt(getText(findViewById(R.id.numberOfSubnets)))) / Math.log(2));
+                appendToOutput("It seems that you want to create " + Integer.parseInt(getText(findViewById(R.id.numberOfSubnets))) + " subnets \n");
+                appendToOutput("We need to find a power of 2 that's greater than or equal to the amount of subnets we need. \n");
+                appendToOutput("In our case the closest is " + (int) Math.pow(2, powerOfTwo) + " which is 2^" + powerOfTwo + "\n");
+                appendToOutput("The power tells us that we need " + powerOfTwo + " additional bits to subnet the network \n");
+                int newCIDR = getCIDR() + powerOfTwo;
+                StringBuilder newSubnetMask = new StringBuilder();
                 for (int i = 0; i < 32; i++) {
                     if (i % 8 == 0 && i != 0) {
-                        subnetMask.append(".");
+                        newSubnetMask.append(".");
                     }
-                    if (i < getCIDR()) {
-                        subnetMask.append(1);
+                    if (i < newCIDR) {
+                        newSubnetMask.append(1);
                     } else {
-                        subnetMask.append(0);
+                        newSubnetMask.append(0);
                     }
-
                 }
-                appendToOutput("Meaning that our subnet mask is: " + subnetMask.toString() + "\n");
+                appendToOutput("So our new subnet mask is: " + newSubnetMask.toString() + "\n");
+                appendToOutput("Note: In CIDR notation we now have a /" + newCIDR + " network\n");
 
                 appendToOutput("--------------------------------\n");
-
-                if (!isAdvancedMode()) {
-                    int powerOfTwo = (int) Math.ceil(Math.log(Integer.parseInt(getText(findViewById(R.id.numberOfSubnets)))) / Math.log(2));
-                    appendToOutput("It seems that you want to create " + Integer.parseInt(getText(findViewById(R.id.numberOfSubnets))) + " subnets \n");
-                    appendToOutput("We need to find a power of 2 that's greater than or equal to the amount of subnets we need. \n");
-                    appendToOutput("In our case the closest is " + (int) Math.pow(2, powerOfTwo) + " which is 2^" + powerOfTwo + "\n");
-                    appendToOutput("The power tells us that we need " + powerOfTwo + " additional bits to subnet the network \n");
-                    int newCIDR = getCIDR() + powerOfTwo;
-                    StringBuilder newSubnetMask = new StringBuilder();
-                    for (int i = 0; i < 32; i++) {
-                        if (i % 8 == 0 && i != 0) {
-                            newSubnetMask.append(".");
-                        }
-                        if (i < newCIDR) {
-                            newSubnetMask.append(1);
-                        } else {
-                            newSubnetMask.append(0);
-                        }
-                    }
-                    appendToOutput("So our new subnet mask is: " + newSubnetMask.toString() + "\n");
-                    appendToOutput("Note: In CIDR notation we now have a /" + newCIDR + " network\n");
-
-                    appendToOutput("--------------------------------\n");
-                    appendToOutput("The remaining " + (32 - newCIDR) + " bits left for hosts \n");
-                    if ((32 - newCIDR) > 0) {
-                        appendToOutput("Now time to list the different subnets \n\n");
-                        String otherFormatIP = "";
-                        if (getCIDR() != 0) {
-                            otherFormatIP = String.format("%0" + getCIDR() + "d", 0).replaceAll("0", "X");
-                        }
-                        for (int i = 0; i < Math.pow(2, powerOfTwo); i++) {
-                            String network = String.format("%0" + powerOfTwo + "d", Long.parseLong(Integer.toBinaryString(i)));
-                            String networkID = fix(String.format("%s%s%" + (32 - newCIDR) + "s", otherFormatIP, network, " ").replaceAll(" ", "0"), ".", 8);
-                            String broadcastAddress = fix(String.format("%s%s%" + (32 - newCIDR) + "s", otherFormatIP, network, " ").replaceAll(" ", "1"), ".", 8);
-                            appendToOutput("Network " + (i + 1) + ": " + convertToDecimal(networkID) + " - " + convertToDecimal(broadcastAddress) + "\n");
-                            appendToOutput("    Maximum Hosts: " + (int) (Math.pow(2, 32 - newCIDR) - 2) + "\n");
-                            appendToOutput("    Network ID: " + convertToDecimal(networkID) + "\n");
-                            appendToOutput("    Broadcast Address: " + convertToDecimal(broadcastAddress) + "\n\n");
-                        }
-                    } else {
-                        appendToOutput("It seems that we don't have enough bits to subnet\n");
-                        appendToOutput("Try increasing the CIDR or decreasing the subnets!");
-                    }
-                } else {
-                    appendToOutput("It seems that you want to create " + Integer.parseInt(getText(findViewById(R.id.numberOfSubnets))) + " subnets \n");
-                    appendToOutput("It also seems that each of your subnets have a different amount of hosts \n");
-                    ArrayList<Integer> orderedList = new ArrayList<>();
-                    for (int i=0; i<Integer.parseInt(getText(findViewById(R.id.numberOfSubnets))); i++) { // Making a copy of the array and calculating powers of 2
-                        int powerOfTwo = (int) Math.ceil(Math.log(variableSubnets.get(i)+2) / Math.log(2));
-                        orderedList.add((int) Math.pow(2, powerOfTwo));
-                    }
-                    for (int i=0; i<(Integer.parseInt(getText(findViewById(R.id.numberOfSubnets)))); i++) {
-                        if (orderedList.get(i).equals(variableSubnets.get(i)+2)) {
-                            appendToOutput("Note: One of your networks does not allow for expandability! \n");
-                            break;
-                        }
-                    }
-                    Collections.sort(orderedList); // Order the array in least to greatest
-                    Collections.reverse(orderedList); // Reverse the order to greatest to least
-
-                    appendToOutput("--------------------------------\n");
+                appendToOutput("The remaining " + (32 - newCIDR) + " bits left for hosts \n");
+                if ((32 - newCIDR) > 0) {
+                    appendToOutput("Now time to list the different subnets \n\n");
                     String otherFormatIP = "";
                     if (getCIDR() != 0) {
                         otherFormatIP = String.format("%0" + getCIDR() + "d", 0).replaceAll("0", "X");
                     }
-                    appendToOutput("We will now create subnets with " + orderedList.toString().substring(1, orderedList.toString().length()-1) + " hosts. \n");
-                    int currentHostCount = 0;
-                    int maximumHosts = (int) Math.pow(2, 32-getCIDR());
-                    for (int i = 0; i < Integer.parseInt(getText(findViewById(R.id.numberOfSubnets))); i++) {
-                        int leftOverBits = 32 - getCIDR();
-                        StringBuilder hostPortion = new StringBuilder(Integer.toBinaryString(currentHostCount));
-                        hostPortion = new StringBuilder(String.format("%0" + leftOverBits + "d", Long.parseLong(hostPortion.toString())));
-                        String networkID = fix(otherFormatIP + hostPortion.toString(), ".", 8);
-                        currentHostCount += orderedList.get(i);
-                        maximumHosts -= orderedList.get(i);
-                        hostPortion = new StringBuilder(Integer.toBinaryString(currentHostCount-1));
-                        hostPortion = new StringBuilder(String.format("%0" + leftOverBits + "d", Long.parseLong(hostPortion.toString())));
-                        String broadcastAddress = fix(otherFormatIP + hostPortion.toString(), ".", 8);
-                        if (broadcastAddress.length()-broadcastAddress.replaceAll("\\.", "").length() > 3 ) {
-                            appendToOutput("It seems we do not have enough space for the hosts you want, halting execution!\n");
-                            break;
-                        }
+                    for (int i = 0; i < Math.pow(2, powerOfTwo); i++) {
+                        String network = String.format("%0" + powerOfTwo + "d", Long.parseLong(Integer.toBinaryString(i)));
+                        String networkID = fix(String.format("%s%s%" + (32 - newCIDR) + "s", otherFormatIP, network, " ").replaceAll(" ", "0"), ".", 8);
+                        String broadcastAddress = fix(String.format("%s%s%" + (32 - newCIDR) + "s", otherFormatIP, network, " ").replaceAll(" ", "1"), ".", 8);
                         appendToOutput("Network " + (i + 1) + ": " + convertToDecimal(networkID) + " - " + convertToDecimal(broadcastAddress) + "\n");
-                        appendToOutput("    Number Of Hosts: " + (orderedList.get(i)-2) + "\n");
+                        appendToOutput("    Maximum Hosts: " + (int) (Math.pow(2, 32 - newCIDR) - 2) + "\n");
                         appendToOutput("    Network ID: " + convertToDecimal(networkID) + "\n");
                         appendToOutput("    Broadcast Address: " + convertToDecimal(broadcastAddress) + "\n\n");
                     }
-                    appendToOutput("According to all this we have " + maximumHosts + " spaces left for additional hosts!");
+                } else {
+                    appendToOutput("It seems that we don't have enough bits to subnet\n");
+                    appendToOutput("Try increasing the CIDR or decreasing the subnets!");
                 }
+            } else {
+                appendToOutput("It seems that you want to create " + Integer.parseInt(getText(findViewById(R.id.numberOfSubnets))) + " subnets \n");
+                appendToOutput("It also seems that each of your subnets have a different amount of hosts \n");
+                ArrayList<Integer> orderedList = new ArrayList<>();
+                for (int i=0; i<Integer.parseInt(getText(findViewById(R.id.numberOfSubnets))); i++) { // Making a copy of the array and calculating powers of 2
+                    int powerOfTwo = (int) Math.ceil(Math.log(variableSubnets.get(i)+2) / Math.log(2));
+                    orderedList.add((int) Math.pow(2, powerOfTwo));
+                }
+                for (int i=0; i<(Integer.parseInt(getText(findViewById(R.id.numberOfSubnets)))); i++) {
+                    if (orderedList.get(i).equals(variableSubnets.get(i)+2)) {
+                        appendToOutput("Note: One of your networks does not allow for expandability! \n");
+                        break;
+                    }
+                }
+                Collections.sort(orderedList); // Order the array in least to greatest
+                Collections.reverse(orderedList); // Reverse the order to greatest to least
+
+                appendToOutput("--------------------------------\n");
+                String otherFormatIP = "";
+                if (getCIDR() != 0) {
+                    otherFormatIP = String.format("%0" + getCIDR() + "d", 0).replaceAll("0", "X");
+                }
+                appendToOutput("We will now create subnets with " + orderedList.toString().substring(1, orderedList.toString().length()-1) + " hosts. \n");
+                int currentHostCount = 0;
+                int maximumHosts = (int) Math.pow(2, 32-getCIDR());
+                for (int i = 0; i < Integer.parseInt(getText(findViewById(R.id.numberOfSubnets))); i++) {
+                    int leftOverBits = 32 - getCIDR();
+                    StringBuilder hostPortion = new StringBuilder(Integer.toBinaryString(currentHostCount));
+                    hostPortion = new StringBuilder(String.format("%0" + leftOverBits + "d", Long.parseLong(hostPortion.toString())));
+                    String networkID = fix(otherFormatIP + hostPortion.toString(), ".", 8);
+                    currentHostCount += orderedList.get(i);
+                    maximumHosts -= orderedList.get(i);
+                    hostPortion = new StringBuilder(Integer.toBinaryString(currentHostCount-1));
+                    hostPortion = new StringBuilder(String.format("%0" + leftOverBits + "d", Long.parseLong(hostPortion.toString())));
+                    String broadcastAddress = fix(otherFormatIP + hostPortion.toString(), ".", 8);
+                    if (broadcastAddress.length()-broadcastAddress.replaceAll("\\.", "").length() > 3 ) {
+                        appendToOutput("It seems we do not have enough space for the hosts you want, halting execution!\n");
+                        break;
+                    }
+                    appendToOutput("Network " + (i + 1) + ": " + convertToDecimal(networkID) + " - " + convertToDecimal(broadcastAddress) + "\n");
+                    appendToOutput("    Number Of Hosts: " + (orderedList.get(i)-2) + "\n");
+                    appendToOutput("    Network ID: " + convertToDecimal(networkID) + "\n");
+                    appendToOutput("    Broadcast Address: " + convertToDecimal(broadcastAddress) + "\n\n");
+                }
+                appendToOutput("According to all this we have " + maximumHosts + " spaces left for additional hosts!");
             }
         });
     }
@@ -461,7 +440,12 @@ public class SubnetterFragment extends Fragment {
         }
     }
 
+    /**
+     * Used to return a view from th activity
+     * @param ID The ID of the view to find
+     * @return THe view with that ID
+     */
     private View findViewById(int ID) {
-        return getActivity().findViewById(ID);
+        return getView().findViewById(ID);
     }
 }

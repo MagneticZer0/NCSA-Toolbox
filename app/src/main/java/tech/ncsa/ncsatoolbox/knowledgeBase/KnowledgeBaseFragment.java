@@ -69,7 +69,7 @@ public class KnowledgeBaseFragment extends Fragment {
 
             TextView title = new TextView(getContext());
             title.setText(item.get(0));
-            ((LinearLayout) getView().findViewById(R.id.knowledgebaseLayout)).addView(title);
+            ((LinearLayout) findViewById(R.id.knowledgebaseLayout)).addView(title);
 
             VideoView videoView = new VideoView(getContext());
             videoView.setVideoURI(Uri.parse(item.get(2)));
@@ -78,7 +78,7 @@ public class KnowledgeBaseFragment extends Fragment {
             mediaController.setMediaPlayer(videoView);
             videoView.setMediaController(mediaController);
             videoView.setLayoutParams(new LinearLayout.LayoutParams(400, 400));
-            ((LinearLayout) getView().findViewById(R.id.knowledgebaseLayout)).addView(videoView);
+            ((LinearLayout) findViewById(R.id.knowledgebaseLayout)).addView(videoView);
         }
     }
 
@@ -92,17 +92,12 @@ public class KnowledgeBaseFragment extends Fragment {
 
             TextView title = new TextView(getContext());
             title.setText(item.get(0));
-            ((LinearLayout) getView().findViewById(R.id.knowledgebaseLayout)).addView(title);
+            ((LinearLayout) findViewById(R.id.knowledgebaseLayout)).addView(title);
 
             new DownloadImageTask(imageview).execute(item.get(1));
-            ((LinearLayout) getView().findViewById(R.id.knowledgebaseLayout)).addView(imageview);
+            ((LinearLayout)findViewById(R.id.knowledgebaseLayout)).addView(imageview);
 
-            imageview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    googleDocsTab(item.get(2));
-                }
-            });
+            imageview.setOnClickListener(view -> googleDocsTab(item.get(2)));
         }
     }
 
@@ -145,4 +140,12 @@ public class KnowledgeBaseFragment extends Fragment {
         }
     }
 
+    /**
+     * Used to return a view from th activity
+     * @param ID The ID of the view to find
+     * @return THe view with that ID
+     */
+    private View findViewById(int ID) {
+        return getView().findViewById(ID);
+    }
 }
