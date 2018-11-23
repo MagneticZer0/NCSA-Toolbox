@@ -1,11 +1,12 @@
 package tech.ncsa.ncsatoolbox.toolbox;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
+import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,7 @@ public class ToolboxFragment extends Fragment {
     @Nullable
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        configureButtons(findViewById(R.id.subnetter), findViewById(R.id.subnetArea), findViewById(R.id.enterSubnetter), "subnetter");
+        configureButtons(findViewById(R.id.subnetter), findViewById(R.id.subnetArea), findViewById(R.id.enterSubnetter));
         getActivity().setTitle(getString(R.string.app_name));
     }
 
@@ -40,10 +41,9 @@ public class ToolboxFragment extends Fragment {
      * @param openButton     The button used for opening a menu
      * @param infoArea       The ConstrainedLayout used to store data like descriptions/images
      * @param enterButton    The button used to enter the new activity
-     * @param activitySwitch The activity switch method to use
      */
-    private void configureButtons(View openButton, final View infoArea, View enterButton, String activitySwitch) {
-        final Button opener = (Button) openButton;
+    private void configureButtons(View openButton, View infoArea, View enterButton) {
+        Button opener = (Button) openButton;
         opener.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_button_up_arrow, 0);
         opener.setOnClickListener(view -> {
             if (infoArea.getVisibility() == View.GONE) {
@@ -55,18 +55,7 @@ public class ToolboxFragment extends Fragment {
             }
         });
         Button enterer = (Button) enterButton;
-        assignEntererMethod(enterer, activitySwitch);
-    }
-
-    /**
-     * Sets the method to run when a button is pressed
-     * @param button The button
-     * @param activitySwitch The method to run
-     */
-    private void assignEntererMethod(final Button button, String activitySwitch) {
-        if (activitySwitch.equals("subnetter")) {
-            button.setOnClickListener(this::switchToSubnetter);
-        }
+        enterer.setOnClickListener(this::switchActivities);
     }
 
     /**
@@ -86,7 +75,7 @@ public class ToolboxFragment extends Fragment {
      *
      * @param ID The View to add the animation to
      */
-    private void closeAnimation(final View ID) {
+    private void closeAnimation(View ID) {
         ScaleAnimation scaleAnimation = new ScaleAnimation(1f, 1f, 1f, 0f, Animation.RELATIVE_TO_SELF, 0f, Animation.RELATIVE_TO_SELF, 0f);
         scaleAnimation.setDuration(150);
         ID.startAnimation(scaleAnimation);
@@ -109,7 +98,7 @@ public class ToolboxFragment extends Fragment {
     /**
      * Used to switch to the activities
      */
-    public void switchToSubnetter(View view) {
+    public void switchActivities(View view) {
         String viewName = getResources().getResourceName(view.getId()).split("/")[1];
         if (viewName.equals("enterSubnetter")) {
             FragmentManager fragMan = getFragmentManager();

@@ -62,7 +62,7 @@ public class KnowledgeBaseFragment extends Fragment {
     }
 
     private void loadVideos() {
-        for (final List<String> item : items) {
+        for (List<String> item : items) {
             if (!item.get(2).contains("mp4")) {
                 continue;
             }
@@ -83,7 +83,7 @@ public class KnowledgeBaseFragment extends Fragment {
     }
 
     private void loadGeneric(String type) {
-        for (final List<String> item : items) {
+        for (List<String> item : items) {
             ImageView imageview = new ImageView(getContext());
 
             if (!item.get(2).contains(type)) {
