@@ -433,11 +433,7 @@ public class SubnetterFragment extends Fragment {
      * @return If the character is a number or a /
      */
     private boolean isValidCIDRChar(char c) {
-        if (c == '/' || (c >= '0' && c <= '9')) {
-            return true;
-        } else {
-            return false;
-        }
+        return c == '/' || (c >= '0' && c <= '9');
     }
 
     /**
