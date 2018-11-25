@@ -102,7 +102,7 @@ public class ToolboxFragment extends Fragment {
         String viewName = getResources().getResourceName(view.getId()).split("/")[1];
         if (viewName.equals("enterSubnetter")) {
             FragmentManager fragMan = getFragmentManager();
-            fragMan.beginTransaction().replace(R.id.content_frame, new SubnetterFragment()).commit();
+            fragMan.beginTransaction().replace(R.id.content_frame, new SubnetterFragment()).addToBackStack(null).commit();
         }
     }
 

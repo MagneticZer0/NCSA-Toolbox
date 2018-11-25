@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import tech.ncsa.ncsatoolbox.MainActivity;
 import tech.ncsa.ncsatoolbox.R;
+import tech.ncsa.ncsatoolbox.knowledgeBase.VideoPlayer.VideoPlayerFragment;
 
 public class KnowledgeBaseFragment extends Fragment {
 
@@ -63,6 +65,7 @@ public class KnowledgeBaseFragment extends Fragment {
 
     private void loadVideos() {
         for (List<String> item : items) {
+            ImageView imageview = new ImageView(getContext());
             if (!item.get(2).contains("mp4")) {
                 continue;
             }
@@ -71,14 +74,17 @@ public class KnowledgeBaseFragment extends Fragment {
             title.setText(item.get(0));
             ((LinearLayout) findViewById(R.id.knowledgebaseLayout)).addView(title);
 
-            VideoView videoView = new VideoView(getContext());
-            videoView.setVideoURI(Uri.parse(item.get(2)));
-            MediaController mediaController = new MediaController(getContext());
-            mediaController.setAnchorView(videoView);
-            mediaController.setMediaPlayer(videoView);
-            videoView.setMediaController(mediaController);
-            videoView.setLayoutParams(new LinearLayout.LayoutParams(400, 400));
-            ((LinearLayout) findViewById(R.id.knowledgebaseLayout)).addView(videoView);
+            new DownloadImageTask(imageview).execute(item.get(1));
+            ((LinearLayout)findViewById(R.id.knowledgebaseLayout)).addView(imageview);
+
+            imageview.setOnClickListener(view -> {
+                FragmentManager fragMan = getFragmentManager();
+                VideoPlayerFragment videoplayer = new VideoPlayerFragment();
+                Bundle typeArguments = new Bundle();
+                typeArguments.putString("video", item.get(2));
+                videoplayer.setArguments(typeArguments);
+                fragMan.beginTransaction().replace(R.id.content_frame, videoplayer).addToBackStack(null).commit();
+            });
         }
     }
 
