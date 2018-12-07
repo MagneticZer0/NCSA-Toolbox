@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity
     private class KnowledgeBaseUpdater extends AsyncTask<Void, Void, Void> {
         protected Void doInBackground(Void... params) {
             File knowledgeBaseListCache = new File(getCacheDir(), "list.txt");
-            if (!knowledgeBaseListCache.exists() || knowledgeBaseListCache.lastModified() + 3600000 < System.currentTimeMillis()) { // If it doesn't exist or is more than an hour old
+            if (!knowledgeBaseListCache.exists() || knowledgeBaseListCache.lastModified() + 28800000 < System.currentTimeMillis()) { // If it doesn't exist or is more than an hour old
                 // Will download file later
                 String testContent = "DNS and DHCP Configuration /!\\ https://ncsa.tech/Presentations/DNS%20and%20DHCP%20Configuration.png /!\\ https://ncsa.tech/Presentations/DNS%20and%20DHCP%20Configuration.pptx\n" +
                         "DNS and DHCP Configuration /!\\ https://ncsa.tech/Presentations/DNS%20and%20DHCP%20Configuration.png /!\\ https://ncsa.tech/Presentations/DNS%20and%20DHCP%20Configuration.mp4\n" +
